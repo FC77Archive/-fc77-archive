@@ -1,0 +1,267 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FC77 – Update your details</title>
+<style>
+  :root {
+    --bg:#f4f6f8; --card:#fff; --ink:#1f2933; --muted:#5f6b7a; --line:#d9dee5;
+    --brand:#0b6e4f; --brand-ink:#fff; --danger:#b42318; --ok:#067647; --radius:12px;
+  }
+  * { box-sizing:border-box; }
+  body { margin:0; font:16px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif; color:var(--ink); background:var(--bg); }
+  .wrap { max-width:720px; margin:0 auto; padding:32px 16px 64px; }
+  header { text-align:center; margin-bottom:24px; }
+  header h1 { margin:0 0 6px; font-size:28px; }
+  header p { margin:0; color:var(--muted); }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:var(--radius); padding:24px; box-shadow:0 1px 2px rgba(0,0,0,.04); }
+  .steps { display:flex; gap:8px; justify-content:center; margin:0 0 20px; padding:0; list-style:none; font-size:13px; color:var(--muted); }
+  .steps li { padding:4px 10px; border-radius:999px; background:#e9edf1; }
+  .steps li.on { background:var(--brand); color:var(--brand-ink); }
+  label { display:block; font-weight:600; font-size:14px; margin:14px 0 6px; }
+  label .req { color:var(--danger); }
+  input[type=text], input[type=email], input[type=tel], input[type=url] {
+    width:100%; padding:10px 12px; border:1px solid var(--line); border-radius:8px; font:inherit; background:#fff;
+  }
+  input:focus { outline:2px solid #9ad2bf; border-color:var(--brand); }
+  .row { display:grid; grid-template-columns:1fr 1fr; gap:0 16px; }
+  @media (max-width:560px) { .row { grid-template-columns:1fr; } }
+  .choices { display:grid; grid-template-columns:repeat(auto-fill,minmax(210px,1fr)); gap:6px 16px; margin-top:4px; }
+  .choices label { font-weight:400; margin:0; display:flex; gap:8px; align-items:center; }
+  .radios label { display:inline-flex; gap:8px; align-items:center; font-weight:400; margin:0 20px 0 0; }
+  fieldset { border:0; padding:0; margin:14px 0 0; }
+  legend { font-weight:600; font-size:14px; margin-bottom:6px; padding:0; }
+  .btn { display:inline-block; padding:11px 18px; border-radius:8px; border:0; font:inherit; font-weight:600; cursor:pointer; background:var(--brand); color:var(--brand-ink); }
+  .btn.secondary { background:#e9edf1; color:var(--ink); }
+  .btn[disabled] { opacity:.6; cursor:default; }
+  .actions { display:flex; gap:10px; align-items:center; margin-top:22px; flex-wrap:wrap; }
+  .note { font-size:14px; color:var(--muted); }
+  .banner { padding:10px 12px; border-radius:8px; font-size:14px; margin-top:14px; }
+  .banner.ok { background:#e6f4ea; color:var(--ok); }
+  .banner.info { background:#e8f0fe; color:#1a4d8f; }
+  .banner.err { background:#fdecea; color:var(--danger); }
+  details { margin-top:18px; }
+  summary { cursor:pointer; color:var(--muted); font-size:14px; }
+  .hidden { display:none !important; }
+  .thanks h2 { margin-top:0; }
+  .thanks p { margin:10px 0; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>FC77 – Update your details</h1>
+    <p>Enter your email. If we already have you on file, we'll show what we have so you can fix it.</p>
+  </header>
+
+  <ul class="steps" id="steps">
+    <li class="on" data-step="1">1. Your email</li>
+    <li data-step="2">2. Your details</li>
+    <li data-step="3">3. Done</li>
+  </ul>
+
+  <!-- STEP 1 -->
+  <div class="card" id="step1">
+    <form id="lookupForm" novalidate>
+      <label for="lookupEmail">Email address <span class="req">*</span></label>
+      <input id="lookupEmail" type="email" autocomplete="email" inputmode="email" placeholder="you@example.com" required>
+      <div id="lookupMsg"></div>
+      <div class="actions">
+        <button class="btn" id="lookupBtn" type="submit">Find my record</button>
+        <span class="note">Not on file yet? That's fine — you'll be able to add yourself.</span>
+      </div>
+    </form>
+  </div>
+
+  <!-- STEP 2 -->
+  <div class="card hidden" id="step2">
+    <div id="foundBanner" class="banner info"></div>
+    <form id="detailsForm" novalidate>
+      <div class="row">
+        <div><label for="firstname">First name</label><input id="firstname" name="firstname" type="text" autocomplete="given-name"></div>
+        <div><label for="lastname">Last name</label><input id="lastname" name="lastname" type="text" autocomplete="family-name"></div>
+      </div>
+      <label for="email">Email <span class="req">*</span></label>
+      <input id="email" name="email" type="email" required autocomplete="email">
+      <div class="row">
+        <div><label for="phone">Phone number</label><input id="phone" name="phone" type="tel" autocomplete="tel"></div>
+        <div><label for="mobilephone">Mobile phone number</label><input id="mobilephone" name="mobilephone" type="tel" autocomplete="tel"></div>
+      </div>
+      <label for="address">Street address</label>
+      <input id="address" name="address" type="text" autocomplete="street-address">
+      <div class="row">
+        <div><label for="city">City</label><input id="city" name="city" type="text" autocomplete="address-level2"></div>
+        <div><label for="state">State/Region</label><input id="state" name="state" type="text" autocomplete="address-level1"></div>
+      </div>
+      <div class="row">
+        <div><label for="zip">Postal code</label><input id="zip" name="zip" type="text" autocomplete="postal-code"></div>
+        <div><label for="country">Country/Region</label><input id="country" name="country" type="text" autocomplete="country-name"></div>
+      </div>
+      <div class="row">
+        <div><label for="company">Company name</label><input id="company" name="company" type="text" autocomplete="organization"></div>
+        <div><label for="jobtitle">Job title</label><input id="jobtitle" name="jobtitle" type="text" autocomplete="organization-title"></div>
+      </div>
+      <label for="website">Website URL</label>
+      <input id="website" name="website" type="url" autocomplete="url">
+
+      <fieldset class="radios">
+        <legend>Do you currently play for an FC77 team? <span class="req">*</span></legend>
+        <div id="playChoices"></div>
+      </fieldset>
+
+      <fieldset id="teamBlock">
+        <legend>FC77 Team (tick all that apply)</legend>
+        <div class="choices" id="teamChoices"></div>
+      </fieldset>
+
+      <div id="submitMsg"></div>
+      <div class="actions">
+        <button class="btn" id="submitBtn" type="submit">Save my information</button>
+        <button class="btn secondary" id="backBtn" type="button">Not you? Start over</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- STEP 3 -->
+  <div class="card hidden thanks" id="step3">
+    <h2>Thanks — we've got your details.</h2>
+    <p><strong>Not getting our emails? Here's how to fix it:</strong></p>
+    <p><strong>Unsubscribed?</strong> Open any of our past emails and click "Manage preferences" at the bottom to resubscribe — or email us at <a href="mailto:info@fc77.org">info@fc77.org</a> and we'll help.</p>
+    <p><strong>Marked us as spam?</strong> Reply to any of our emails or contact us at <a href="mailto:info@fc77.org">info@fc77.org</a> and we'll clear it — this can't be undone from your side.</p>
+    <p><strong>Flagged as unengaged?</strong> That clears automatically the next time you open or click one of our emails.</p>
+    <p class="note">We've also sent you a confirmation email with a link to review your details again any time.</p>
+    <div class="actions"><button class="btn secondary" id="againBtn" type="button">Update someone else</button></div>
+  </div>
+
+  <details>
+    <summary>Privacy</summary>
+    <p class="note">This page looks up the FC77 contact record for the email you enter and lets you correct it. Your changes are saved to FC77's HubSpot account. Questions: <a href="mailto:info@fc77.org">info@fc77.org</a>.</p>
+  </details>
+</div>
+
+<!-- HubSpot tracking code: sets the hutk cookie so submissions link to the right visitor -->
+<script type="text/javascript" id="hs-script-loader" async defer src="//js-na2.hs-scripts.com/40098597.js"></script>
+
+<script>
+(function () {
+  const $ = (id) => document.getElementById(id);
+  let CFG = null;
+
+  function setStep(n) {
+    document.querySelectorAll('#steps li').forEach(li => li.classList.toggle('on', Number(li.dataset.step) === n));
+    $('step1').classList.toggle('hidden', n !== 1);
+    $('step2').classList.toggle('hidden', n !== 2);
+    $('step3').classList.toggle('hidden', n !== 3);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+  function banner(el, kind, text) { el.innerHTML = text ? `<div class="banner ${kind}">${text}</div>` : ''; }
+  function getCookie(name) {
+    const m = document.cookie.match(new RegExp('(?:^|; )' + name + '=([^;]*)'));
+    return m ? decodeURIComponent(m[1]) : null;
+  }
+
+  async function loadConfig() {
+    if (CFG) return CFG;
+    const r = await fetch('/api/lookup');
+    const j = await r.json();
+    if (!r.ok) throw new Error(j.error || 'Could not load form configuration.');
+    CFG = j.config;
+    // Build radio + checkbox choices from live HubSpot property options
+    $('playChoices').innerHTML = CFG.playOptions.map(o =>
+      `<label><input type="radio" name="__play" value="${o.value}"> ${o.label}</label>`).join('');
+    $('teamChoices').innerHTML = CFG.teamOptions.map(o =>
+      `<label><input type="checkbox" name="__team" value="${o.value}"> ${o.label}</label>`).join('');
+    document.querySelectorAll('input[name="__play"]').forEach(r => r.addEventListener('change', syncTeamVisibility));
+    return CFG;
+  }
+
+  function syncTeamVisibility() {
+    const v = (document.querySelector('input[name="__play"]:checked') || {}).value;
+    const isYes = /^y/i.test(v || '');
+    $('teamBlock').classList.toggle('hidden', !isYes);
+    if (!isYes) document.querySelectorAll('input[name="__team"]').forEach(c => c.checked = false);
+  }
+
+  function fillForm(c) {
+    CFG.standardProps.forEach(p => { if ($(p)) $(p).value = c[p] || ''; });
+    const play = c[CFG.playProp] || '';
+    document.querySelectorAll('input[name="__play"]').forEach(r => r.checked = (r.value === play));
+    const teams = (c[CFG.teamProp] || '').split(';').map(s => s.trim()).filter(Boolean);
+    document.querySelectorAll('input[name="__team"]').forEach(cb => cb.checked = teams.includes(cb.value));
+    syncTeamVisibility();
+  }
+
+  // ---- Step 1: lookup ----
+  $('lookupForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const email = $('lookupEmail').value.trim();
+    banner($('lookupMsg'), '', '');
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { banner($('lookupMsg'), 'err', 'Please enter a valid email address.'); return; }
+    $('lookupBtn').disabled = true; $('lookupBtn').textContent = 'Looking up…';
+    try {
+      await loadConfig();
+      const r = await fetch('/api/lookup', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email }) });
+      const j = await r.json();
+      if (!r.ok) throw new Error(j.error || 'Lookup failed.');
+      fillForm(j.contact);
+      $('foundBanner').className = 'banner ' + (j.found ? 'ok' : 'info');
+      $('foundBanner').innerHTML = j.found
+        ? `We found a record for <strong>${email}</strong>. Check the details below, change anything that's out of date, and save.`
+        : `We don't have <strong>${email}</strong> on file yet. Fill in your details below and we'll add you.`;
+      setStep(2);
+    } catch (err) {
+      banner($('lookupMsg'), 'err', err.message);
+    } finally {
+      $('lookupBtn').disabled = false; $('lookupBtn').textContent = 'Find my record';
+    }
+  });
+
+  // ---- Step 2: submit to HubSpot Forms API ----
+  $('detailsForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    banner($('submitMsg'), '', '');
+    const play = document.querySelector('input[name="__play"]:checked');
+    if (!play) { banner($('submitMsg'), 'err', 'Please tell us whether you currently play for an FC77 team.'); return; }
+    const email = $('email').value.trim();
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { banner($('submitMsg'), 'err', 'Please enter a valid email address.'); return; }
+
+    const fields = [];
+    CFG.standardProps.forEach(p => { if ($(p)) fields.push({ objectTypeId: '0-1', name: p, value: $(p).value.trim() }); });
+    fields.push({ objectTypeId: '0-1', name: CFG.playProp, value: play.value });
+    const teams = [...document.querySelectorAll('input[name="__team"]:checked')].map(c => c.value);
+    fields.push({ objectTypeId: '0-1', name: CFG.teamProp, value: teams.join(';') });
+
+    const payload = {
+      fields,
+      context: {
+        hutk: getCookie('hubspotutk') || undefined,
+        pageUri: location.href,
+        pageName: document.title,
+      },
+    };
+    $('submitBtn').disabled = true; $('submitBtn').textContent = 'Saving…';
+    try {
+      const url = `https://api.hsforms.com/submissions/v3/integration/submit/${CFG.portalId}/${CFG.formGuid}`;
+      const r = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+      if (!r.ok) {
+        const j = await r.json().catch(() => ({}));
+        const msg = (j.errors && j.errors.map(x => x.message).join('; ')) || j.message || `Submission failed (${r.status}).`;
+        throw new Error(msg);
+      }
+      setStep(3);
+    } catch (err) {
+      banner($('submitMsg'), 'err', err.message);
+    } finally {
+      $('submitBtn').disabled = false; $('submitBtn').textContent = 'Save my information';
+    }
+  });
+
+  $('backBtn').addEventListener('click', () => { $('detailsForm').reset(); setStep(1); });
+  $('againBtn').addEventListener('click', () => { $('lookupEmail').value = ''; $('detailsForm').reset(); setStep(1); });
+
+  loadConfig().catch(() => { /* config will retry on first lookup */ });
+})();
+</script>
+</body>
+</html>

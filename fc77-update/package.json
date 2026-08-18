@@ -1,0 +1,7 @@
+{
+  "name": "fc77-update-details",
+  "version": "1.0.0",
+  "private": true,
+  "description": "FC77 self-service contact lookup + update page (Vercel + HubSpot)",
+  "engines": { "node": ">=18" }
+}
